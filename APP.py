@@ -55,6 +55,17 @@ if archivos:
 
             fecha_archivo = datetime.strptime(
                 fecha_match.group(),
+                "%d-%m-%Y"
+            )
+            df_temp["fecha_archivo"] = fecha_archivo
+            
+        df_temp.to_sql(
+            "corridas",
+            conn,
+            if_exists="append",
+            ndex=False
+        )    
+                            
 # ==========================
 # FUNCION
 # ==========================
