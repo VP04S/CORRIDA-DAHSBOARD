@@ -156,7 +156,7 @@ for campo in [
     "bodega",
     "clase_ubicacion",
     "stat_code"
-\]:
+]:
 
     valores = st.sidebar.multiselect(
         campo.upper(),
