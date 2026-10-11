@@ -17,7 +17,31 @@ st.set_page_config(
 # RUTA
 # ==========================
 
-RUTA_DATOS = r"C:\Users\svillanuevapo\OneDrive - Falabella (1)\Reportes1\2.- Customer Service\22.Corridas"
+import sqlite3
+
+DB_FILE = "corridas.db"
+
+archivos = st.file_uploader(
+    "📤 Subir CSV de Corridas",
+    type=["csv"],
+    accept_multiple_files=True
+)
+if archivos:
+
+    conn = sqlite3.connect(DB_FILE)
+
+    for archivo in archivos:
+
+        df_temp = pd.read_csv(
+            archivo,
+            sep=None,
+            engine="python"
+        )
+
+        df_temp.columns = (
+            df_temp.columns
+            .str.strip()
+            .str.lower()
 
 # ==========================
 # FUNCION
