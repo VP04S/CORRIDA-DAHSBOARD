@@ -93,6 +93,8 @@ def cargar_datos():
 
 df = cargar_datos()
 
+st.success(f"Archivos procesados: {len(list(Path(RUTA_DATOS).glob('*.csv')))}")
+st.info(f"Registros cargados: {len(df):,}")
 if df.empty:
 
     st.error("No se encontraron archivos")
