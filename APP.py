@@ -32,12 +32,33 @@ if archivos:
 
     for archivo in archivos:
 
+        try:
+    df_temp = pd.read_csv(
+        archivo,
+        sep=",",
+        encoding="utf-8",
+        low_memory=False
+    )
+except:
+    try:
+        archivo.seek(0)
+
         df_temp = pd.read_csv(
             archivo,
-            sep=None,
-            engine="python"
+            sep=";",
+            encoding="utf-8",
+            low_memory=False
         )
+    except:
+        archivo.seek(0)
 
+        df_temp = pd.read_csv(
+            archivo,
+            sep=";",
+            encoding="latin-1",
+            low_memory=False
+        )
+        
         df_temp.columns = (
             df_temp.columns
             .str.strip()
