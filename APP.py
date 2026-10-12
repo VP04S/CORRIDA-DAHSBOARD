@@ -62,6 +62,24 @@ if archivos:
 
         fecha_match = re.search(
             r"(\d{2})-(\d{2})-(\d{4})",
+            nombre
+        )
+
+        if fecha_match:
+
+            fecha_archivo = datetime.strptime(
+                fecha_match.group(),
+                "%d-%m-%Y"
+            )
+
+            df_temp["fecha_archivo"] = fecha_archivo
+
+        df_temp.to_sql(
+            "corridas",
+            conn,
+            if_exists="append",
+            index=False
+        )      
 
 # ==========================
 # CARGA DESDE SQLITE
