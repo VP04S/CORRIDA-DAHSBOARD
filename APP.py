@@ -34,46 +34,35 @@ if archivos:
 
         try:
 
-        df_temp = pd.read_csv(
-        archivo,
-        sep="|",
-        encoding="utf-8",
-        low_memory=False
-    )
+            df_temp = pd.read_csv(
+                archivo,
+                sep="|",
+                encoding="utf-8",
+                low_memory=False
+            )
 
-except:
+        except:
 
-    archivo.seek(0)
+            archivo.seek(0)
 
-    df_temp = pd.read_csv(
-        archivo,
-        sep="|",
-        encoding="latin-1",
-        low_memory=False
-    )
-    
+            df_temp = pd.read_csv(
+                archivo,
+                sep="|",
+                encoding="latin-1",
+                low_memory=False
+            )
+
+        df_temp.columns = (
+            df_temp.columns
+            .str.strip()
+            .str.lower()
+        )
+
         nombre = archivo.name
 
         fecha_match = re.search(
             r"(\d{2})-(\d{2})-(\d{4})",
-            nombre
-        )
 
-        if fecha_match:
-
-            fecha_archivo = datetime.strptime(
-                fecha_match.group(),
-                "%d-%m-%Y"
-            )
-            df_temp["fecha_archivo"] = fecha_archivo
-            
-        df_temp.to_sql(
-            "corridas",
-            conn,
-            if_exists="append",
-            index=False
-        )    
-                            
 # ==========================
 # CARGA DESDE SQLITE
 # ==========================
