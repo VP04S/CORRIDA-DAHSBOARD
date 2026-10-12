@@ -33,7 +33,7 @@ if archivos:
     for archivo in archivos:
 
         try:
-
+            
             df_temp = pd.read_csv(
                 archivo,
                 sep="|",
