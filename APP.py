@@ -63,85 +63,28 @@ if archivos:
             "corridas",
             conn,
             if_exists="append",
-            ndex=False
+            index=False
         )    
                             
 # ==========================
-# FUNCION
+# CARGA DESDE SQLITE
 # ==========================
 
-@st.cache_data(show_spinner=False)
-def cargar_datos():
+conn = sqlite3.connect(DB_FILE)
 
-    archivos = list(
-        Path(RUTA_DATOS).glob("*.csv")
+try:
+
+    df = pd.read_sql(
+        "SELECT * FROM corridas",
+        conn
     )
 
-    archivos = sorted(
-        archivos,
-        key=os.path.getmtime,
-        reverse=True
-    )[:100]
+except:
 
-    dataframes = []
+    df = pd.DataFrame()
 
-    for archivo in archivos:
-
-        try:
-
-            df = pd.read_csv(
-                archivo,
-                sep=",",
-                low_memory=False
-            )
-
-        except:
-
-            try:
-
-                df = pd.read_csv(
-                    archivo,
-                    sep=";",
-                    low_memory=False
-                )
-
-            except:
-                continue
-
-        nombre = archivo.stem
-
-        fecha_match = re.search(
-            r"(\d{2})-(\d{2})-(\d{4})",
-            nombre
-        )
-
-        if fecha_match:
-
-            fecha_archivo = datetime.strptime(
-                fecha_match.group(),
-                "%d-%m-%Y"
-            )
-
-            df["fecha_archivo"] = fecha_archivo
-
-        dataframes.append(df)
-
-    if len(dataframes) == 0:
-        return pd.DataFrame()
-
-    return pd.concat(
-        dataframes,
-        ignore_index=True
-    )
-
-# ==========================
-# CARGA
-# ==========================
-
-df = cargar_datos()
-
-st.success(f"Archivos procesados: {len(list(Path(RUTA_DATOS).glob('*.csv')))}")
-st.info(f"Registros cargados: {len(df):,}")
+conn.close()
+st.success(f"📁 Registros históricos: {len(df):,}")
 if df.empty:
 
     st.error("No se encontraron archivos")
